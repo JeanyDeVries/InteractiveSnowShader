@@ -2,13 +2,11 @@
 {
     Properties
     {
-        _Color ("Color red", Range(0,1)) = 1
-        _Opacity ("Opacity", Range(0,1)) = 1
+        _Opacity ("Opacity", Range(0,1)) = 0.5
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 200
+        Tags {"RenderType" = "Transparent"}
         Blend One One
 
         CGPROGRAM
@@ -24,21 +22,18 @@
         };
 
         half _Opacity;
-        half _Color;
-
-        UNITY_INSTANCING_BUFFER_START(Props)
-        UNITY_INSTANCING_BUFFER_END(Props)
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-            o.Albedo.r = _Color * _Opacity;
-            o.Albedo = (0.0).xxx;
+            float4 redColor = float4(1.0, 0.0, 0.0, 1.0);
+
 
             float d = pow(max(dot(IN.worldNormal, float3(0.0, 1.0, 0.0)), 0.0), 5.0);
 
+            o.Albedo = (0.0).xxx;
+
             o.Emission = (0.0).xxx;
-            o.Emission.r = _Color * _Opacity * d;
+            o.Emission.r = redColor * _Opacity * d;
 
         }
         ENDCG

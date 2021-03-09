@@ -12,11 +12,11 @@
     }
 
     SubShader{
-        Tags { "RenderType" = "Opaque" }
+        Tags { "RenderType" = "Transparent" }
         LOD 300
 
         CGPROGRAM
-        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessDistance nolightmap
+        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessFixed nolightmap
         #pragma target 5.0
         #include "Tessellation.cginc"
 
@@ -29,10 +29,9 @@
 
         float _Tess;
 
-        float4 tessDistance(appdata v0, appdata v1, appdata v2) {
-            float minDist = 10.0;
-            float maxDist = 25.0;
-            return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, minDist, maxDist, _Tess);
+        float4 tessFixed()
+        {
+            return _Tess;
         }
 
         sampler2D _Splat;
@@ -56,9 +55,6 @@
 
             float d = saturate(tex2Dlod(_Splat, float4(uv,0,0)).r) * _Displacement;
             v.vertex.xyz -= v.normal * d;
-
-            //Set the ground even to the height of the displacement
-            v.vertex.xyz += v.normal * _Displacement;
         }
 
         struct Input {
@@ -77,9 +73,8 @@
             half amount = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r);
             half4 c = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, amount);
             o.Albedo = c.rgb;
-            //o.Albedo = tex2D(_GroundTex, IN.uv_GroundTex).xyz * _GroundColor;
-            o.Specular = 0.2;
-            o.Gloss = 1.0;
+            o.Specular = 0.5;
+            o.Gloss = 0.5;
         }
         ENDCG
         }

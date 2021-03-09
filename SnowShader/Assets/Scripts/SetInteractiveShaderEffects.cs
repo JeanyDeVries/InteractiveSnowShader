@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
-    [SerializeField] RenderTexture rt;
-
     // Start is called before the first frame update
     void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
         Shader.SetGlobalFloat("_OrthographicCamSize", GetComponent<Camera>().orthographicSize);
-    }
-
-    private void Update()
-    {
-        rt = GetComponent<Camera>().targetTexture;
-        Shader.SetGlobalTexture("_GlobalEffectRT", rt);
-        Shader.SetGlobalVector("_CameraPosition", transform.position);
     }
 }

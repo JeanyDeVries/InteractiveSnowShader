@@ -1,5 +1,8 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
+/*
+    Set the opacity to the red material. It will then blend in the render texture
+*/
 Shader "Custom/OpacitySnow"
 {
     Properties
@@ -9,8 +12,11 @@ Shader "Custom/OpacitySnow"
     SubShader
     {
         Tags { "RenderType"="Transparent" }
+
+        //Blendmode enabled so the colors with custom opacity will overlay
         BlendOp Add
         Blend One One
+
         LOD 100
 
         Pass
@@ -35,8 +41,10 @@ Shader "Custom/OpacitySnow"
 
             fixed4 frag () : SV_Target
             {
+                //Always output red for the render texture
                 float4 redColor = float4(1.0, 0.0, 0.0, 1.0);      
 
+                //Add the opacity to the color
                 fixed4 col = redColor * _Opacity;
                 return col;
             }

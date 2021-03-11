@@ -1,14 +1,32 @@
 ﻿Shader "Custom/Snowtracks"
 {
     Properties{
-            _Tess("Tessellation", Range(1,64)) = 4
-            _SnowColor("Snow color", color) = (1,1,1,0)
-            _SnowTex("Snow texture", 2D) = "white" {}
-            _GroundColor("Ground color", color) = (1,1,1,0)
-            _GroundTex("Ground texture", 2D) = "white" {}
-            _Splat("Splat Texture", 2D) = "black" {}
-            _Displacement("Displacement", Range(0, 1.0)) = 0.3
-            _SpecColor("Spec color", color) = (0.5,0.5,0.5,0.5)
+        [Header(Vertex options)]
+        [Space(5)]
+        _Tess("Tessellation", Range(1,64)) = 4
+        _Displacement("Displacement", Range(0, 1.0)) = 0.3
+
+        [Space(10)]
+        [Header(Snow)]
+        [Space(5)]
+        _SnowColor("Snow color", color) = (1,1,1,0)
+        _SnowTex("Snow texture", 2D) = "white" {}
+
+        [Space(10)]
+        [Header(Ground)]
+        [Space(5)]
+        _GroundColor("Ground color", color) = (1,1,1,0)
+        _GroundTex("Ground texture", 2D) = "white" {}
+
+        [Space(10)]
+        [Header(Splat texture)]
+        [Space(5)]
+        _Splat("Splat Texture", 2D) = "black" {}
+
+        [Space(10)]
+        [Header(Lighting)]
+         [Space(5)]
+        _SpecColor("Spec color", color) = (0.5,0.5,0.5,0.5)
     }
 
     SubShader{
@@ -28,8 +46,8 @@
             float2 texcoord : TEXCOORD0;
         };
 
+        /*Set the tesselation set in the inspector to the mesh*/
         float _Tess;
-
         float4 tessFixed()
         {
             return _Tess;
@@ -38,10 +56,8 @@
         sampler2D _Splat;
         float _Displacement;
 
-        uniform sampler2D _GlobalEffectRT;
         uniform float _OrthographicCamSize;
         
-
         sampler2D _GroundTex;
         fixed4 _GroundColor;
         sampler2D _SnowTex;
@@ -54,13 +70,24 @@
         sampler2D _CameraDepthNormalsTexture;
         void disp(inout appdata v)
         {
+            //Get the world position
             float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+
+            //Set the position of the uv
             float2 uv = worldPos.xz - _CameraPosition.xz;
+            //Set the correct scale 
             uv = uv / (_OrthographicCamSize * 2);
+            //Add an offset so the position is correct
             uv += 0.5;
 
-            float d = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r) * _Displacement;
-            v.vertex.xyz -= v.normal * d;
+
+            //Clamp the texture from 0 to 1 so it will not stack 
+            //Look up the splat texture and grab the red value of the uv
+            //Add the displacement value as an offset
+            float depth = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r) * _Displacement;
+            //Set the vertex and distract the normal with the displacement for the depth in the snow
+            v.vertex.xyz -= v.normal * depth;
 
         }
 
@@ -76,13 +103,19 @@
         {
             // calculates UV based on distance on XZ plane to orthographic camera. 
             float2 uv = IN.worldPos.xz - _CameraPosition.xz;
+            //Set the correct scale 
             uv = uv / (_OrthographicCamSize * 2);
+            //Add an offset so the position is correct
             uv += 0.5;
 
-            half4 c;
-            half amount = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r);
 
-            c = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, amount);
+            //Clamp the texture from 0 to 1 so it will not stack
+            //Look up the splat texture and grab the red value of the uv
+            //Add the displacement value as an offset
+            half depth = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r);
+
+            //mix the snow and ground texture according to the depth of the snow
+            half color = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, depth);
                 
             o.Albedo = c.rgb;
             o.Specular = 0.5;

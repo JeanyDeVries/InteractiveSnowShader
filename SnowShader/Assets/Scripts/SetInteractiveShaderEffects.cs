@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Awake()
     {
+        //Set the FPS rate to 60 so the blending will not go super fast in the render texture
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+
+        //Set the value correctly in the shader
         Shader.SetGlobalFloat("_OrthographicCamSize", GetComponent<Camera>().orthographicSize);
     }
 }

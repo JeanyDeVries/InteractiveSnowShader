@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Unlit/OpacitySnow"
+Shader "Custom/OpacitySnow"
 {
     Properties
     {
@@ -35,7 +35,8 @@ Shader "Unlit/OpacitySnow"
 
             fixed4 frag () : SV_Target
             {
-                float4 redColor = float4(1.0, 0.0, 0.0, 1.0);                
+                float4 redColor = float4(1.0, 0.0, 0.0, 1.0);      
+
                 fixed4 col = redColor * _Opacity;
                 return col;
             }

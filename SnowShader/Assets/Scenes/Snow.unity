@@ -751,8 +751,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d4d03b0d6822b4fb70cb5b77bcecfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimitRender: 1
+  timeLimitRender: 3
   snowTrackRenderer: {fileID: 974578421}
+  player: {fileID: 1672466281}
 --- !u!1 &1082294614
 GameObject:
   m_ObjectHideFlags: 0

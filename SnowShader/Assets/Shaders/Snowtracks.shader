@@ -21,7 +21,7 @@
         [Space(10)]
         [Header(SplatTexture)]
         [Space(5)]
-        _Splat("Splat Texture", 2D) = "black" {}
+        _MainTex("Splat Texture", 2D) = "black" {}
 
         [Space(10)]
         [Header(Lighting)]
@@ -53,7 +53,7 @@
             return _Tess;
         }
 
-        sampler2D _Splat;
+        sampler2D _MainTex;
         float _Displacement;
 
         uniform float _OrthographicCamSize;
@@ -85,7 +85,7 @@
             //Clamp the texture from 0 to 1 so it will not stack 
             //Look up the splat texture and grab the red value of the uv
             //Add the displacement value as an offset
-            float depth = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r) * _Displacement;
+            float depth = saturate(tex2Dlod(_MainTex, float4(uv, 0, 0)).r) * _Displacement;
             //Set the vertex and distract the normal with the displacement for the depth in the snow
             v.vertex.xyz -= v.normal * depth;
 
@@ -112,7 +112,7 @@
             //Clamp the texture from 0 to 1 so it will not stack
             //Look up the splat texture and grab the red value of the uv
             //Add the displacement value as an offset
-            half depth = saturate(tex2Dlod(_Splat, float4(uv, 0, 0)).r);
+            half depth = saturate(tex2Dlod(_MainTex, float4(uv, 0, 0)).r);
 
             //mix the snow and ground texture according to the depth of the snow
             half4 color = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, depth);

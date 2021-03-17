@@ -8,6 +8,8 @@ public class SetInteractiveShaderEffects : MonoBehaviour
     [SerializeField] float timeLimitRender;
     [SerializeField] Renderer snowTrackRenderer;
 
+    [SerializeField] GameObject player;
+
     private Camera orthoCam;
     private float timer;
 
@@ -15,21 +17,29 @@ public class SetInteractiveShaderEffects : MonoBehaviour
     {
         orthoCam = GetComponent<Camera>();
 
-        //Set the FPS rate to 60 so the blending will not go super fast in the render texture
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
-
         //Set the value correctly in the shader
         Shader.SetGlobalFloat("_OrthographicCamSize", orthoCam.orthographicSize);
     }
 
     private void Update()
     {
-        /*
         Timer();
         if (timer < timeLimitRender)
             return;
 
+        orthoCam.transform.position = player.transform.position;
+
+        RenderTexture temp = RenderTexture.GetTemporary(orthoCam.targetTexture.width, orthoCam.targetTexture.height,
+                0, RenderTextureFormat.ARGBFloat);
+
+        Graphics.Blit(orthoCam.targetTexture, temp, snowTrackRenderer.material);
+        orthoCam.targetTexture = temp;
+       // snowTrackRenderer.material.SetTexture("_MainTex", orthoCam.targetTexture);
+
+        temp.Release();
+       // RenderTexture.ReleaseTemporary(temp);
+
+        /*
         CommandBuffer buf = new CommandBuffer();
         buf.name = "Setting up a new render texture";
 
@@ -43,8 +53,8 @@ public class SetInteractiveShaderEffects : MonoBehaviour
 
         orthoCam.AddCommandBuffer(CameraEvent.AfterSkybox, buf);
         buf.ReleaseTemporaryRT(screenSplatID);
-
-        timer = 0;*/
+        */
+        timer = 0;
     }
 
     private void Timer()

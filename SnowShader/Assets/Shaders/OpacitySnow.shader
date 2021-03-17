@@ -7,7 +7,7 @@ Shader "Custom/OpacitySnow"
 {
     Properties
     {
-        _Opacity("Opacity", Range(0,0.2)) = 0.1
+        _Opacity("Opacity", Range(0,10)) = 0.1
     }
     SubShader
     {
@@ -45,7 +45,7 @@ Shader "Custom/OpacitySnow"
                 float4 redColor = float4(1.0, 0.0, 0.0, 1.0);      
 
                 //Add the opacity to the color
-                fixed4 col = redColor * _Opacity;
+                fixed4 col = redColor * _Opacity * unity_DeltaTime;
                 return col;
             }
             ENDCG

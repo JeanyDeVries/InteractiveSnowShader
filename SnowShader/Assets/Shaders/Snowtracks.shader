@@ -19,7 +19,7 @@
         _GroundTex("Ground texture", 2D) = "white" {}
 
         [Space(10)]
-        [Header(Splat texture)]
+        [Header(SplatTexture)]
         [Space(5)]
         _Splat("Splat Texture", 2D) = "black" {}
 

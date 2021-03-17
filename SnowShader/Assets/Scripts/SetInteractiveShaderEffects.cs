@@ -6,12 +6,15 @@ using UnityEngine.Rendering;
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
     [SerializeField] float timeLimitRender;
-    [SerializeField] Renderer snowTrackRenderer;
+    //[SerializeField] Renderer snowTrackRenderer;
+    [SerializeField] private Material MovementCorrectionMaterial;
 
     [SerializeField] GameObject player;
 
     private Camera orthoCam;
     private float timer;
+
+    private Vector2 oldPlayerPos;
 
     void Awake()
     {
@@ -19,6 +22,10 @@ public class SetInteractiveShaderEffects : MonoBehaviour
 
         //Set the value correctly in the shader
         Shader.SetGlobalFloat("_OrthographicCamSize", orthoCam.orthographicSize);
+
+        oldPlayerPos = new Vector2(player.transform.position.x, player.transform.position.z);
+
+        RecenterSplatMap();
     }
 
     private void Update()
@@ -26,35 +33,32 @@ public class SetInteractiveShaderEffects : MonoBehaviour
         Timer();
         if (timer < timeLimitRender)
             return;
+        timer = 0.0f;
 
-        orthoCam.transform.position = player.transform.position;
+        RecenterSplatMap();
+    }
 
+    private void RecenterSplatMap()
+    {
+        orthoCam.transform.position = player.transform.position + new Vector3(0.0f, 50.0f, 0.0f);
+
+        Vector2 currPos = new Vector2(player.transform.position.x, player.transform.position.z);
+        Vector2 delta = currPos - oldPlayerPos;
+        delta /= orthoCam.orthographicSize * 2.0f;
+
+        oldPlayerPos = currPos;
+
+        MovementCorrectionMaterial.SetVector("_UVOffset", delta);
         RenderTexture temp = RenderTexture.GetTemporary(orthoCam.targetTexture.width, orthoCam.targetTexture.height,
-                0, RenderTextureFormat.ARGBFloat);
-
-        Graphics.Blit(orthoCam.targetTexture, temp, snowTrackRenderer.material);
-        orthoCam.targetTexture = temp;
-       // snowTrackRenderer.material.SetTexture("_MainTex", orthoCam.targetTexture);
-
+              0, orthoCam.targetTexture.format);
+        Graphics.Blit(orthoCam.targetTexture, temp, MovementCorrectionMaterial);
+        Graphics.Blit(temp, orthoCam.targetTexture);
         temp.Release();
-       // RenderTexture.ReleaseTemporary(temp);
+    }
 
-        /*
-        CommandBuffer buf = new CommandBuffer();
-        buf.name = "Setting up a new render texture";
-
-        RenderTexture temp = new RenderTexture(orthoCam.targetTexture.width, orthoCam.targetTexture.height,
-            0, RenderTextureFormat.ARGBFloat);
-
-        int screenSplatID = Shader.PropertyToID("_Splat");
-        buf.GetTemporaryRT(screenSplatID, temp.width, temp.height, 0, FilterMode.Bilinear);
-        buf.Blit(orthoCam.targetTexture, screenSplatID);
-        snowTrackRenderer.materials[0].SetTexture("_Splat", temp);
-
-        orthoCam.AddCommandBuffer(CameraEvent.AfterSkybox, buf);
-        buf.ReleaseTemporaryRT(screenSplatID);
-        */
-        timer = 0;
+    private void OnGUI()
+    {
+        GUI.DrawTexture(new Rect(new Vector2(25.0f, 25.0f), new Vector2(500.0f, 500.0f)), orthoCam.targetTexture); 
     }
 
     private void Timer()

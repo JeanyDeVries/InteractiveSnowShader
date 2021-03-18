@@ -116,8 +116,8 @@
 
             //mix the snow and ground texture according to the depth of the snow
             half4 color = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, depth);
-                
-            o.Albedo = color.rgb;
+
+            o.Albedo = color.rgb * 1.0;
             o.Specular = 0.5;
             o.Gloss = 0.5;
         }

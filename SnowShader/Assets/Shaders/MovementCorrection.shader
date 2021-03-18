@@ -32,6 +32,7 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float4  _MainTex_TexelSize;
             //float _OrthographicCamSize;
             float2 _UVOffset;
             float _Scale;
@@ -40,13 +41,19 @@
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv+  _UVOffset * _Scale);
+                fixed4 col = tex2D(_MainTex, i.uv +  _UVOffset);
+                //fixed4 col = tex2D(_MainTex, i.uv);
+
+                float x = step(1.0 - _MainTex_TexelSize.x * 10.0f, saturate(abs((i.uv.x  * 2.0) - 1.0)));
+                float y = step(1.0 - _MainTex_TexelSize.y * 10.0f, saturate(abs((i.uv.y  * 2.0) - 1.0)));
+                col.rgb = lerp(col.rgb, (0.0).xxx, min(x + y, 1.0));   
+
                 col.a = 1.0;
                 return col;
             }

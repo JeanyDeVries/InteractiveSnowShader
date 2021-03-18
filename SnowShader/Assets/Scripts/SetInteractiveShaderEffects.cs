@@ -8,6 +8,7 @@ public class SetInteractiveShaderEffects : MonoBehaviour
     [SerializeField] float timeLimitRender;
     //[SerializeField] Renderer snowTrackRenderer;
     [SerializeField] private Material MovementCorrectionMaterial;
+    [SerializeField] private bool Debug = false;
 
     [SerializeField] GameObject player;
 
@@ -40,13 +41,14 @@ public class SetInteractiveShaderEffects : MonoBehaviour
 
     private void RecenterSplatMap()
     {
-        orthoCam.transform.position = player.transform.position + new Vector3(0.0f, 50.0f, 0.0f);
 
         Vector2 currPos = new Vector2(player.transform.position.x, player.transform.position.z);
         Vector2 delta = currPos - oldPlayerPos;
         delta /= orthoCam.orthographicSize * 2.0f;
 
         oldPlayerPos = currPos;
+        orthoCam.transform.position = player.transform.position + new Vector3(0.0f, 50.0f, 0.0f);
+        Shader.SetGlobalVector("_CameraPosition", orthoCam.transform.position);
 
         MovementCorrectionMaterial.SetVector("_UVOffset", delta);
         RenderTexture temp = RenderTexture.GetTemporary(orthoCam.targetTexture.width, orthoCam.targetTexture.height,
@@ -58,7 +60,8 @@ public class SetInteractiveShaderEffects : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.DrawTexture(new Rect(new Vector2(25.0f, 25.0f), new Vector2(500.0f, 500.0f)), orthoCam.targetTexture); 
+        if (Debug)
+            GUI.DrawTexture(new Rect(new Vector2(25.0f, 25.0f), new Vector2(500.0f, 500.0f)), orthoCam.targetTexture); 
     }
 
     private void Timer()

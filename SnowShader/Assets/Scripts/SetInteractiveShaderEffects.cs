@@ -6,7 +6,6 @@ using UnityEngine.Rendering;
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
     [SerializeField] float timeLimitRender;
-    //[SerializeField] Renderer snowTrackRenderer;
     [SerializeField] private Material MovementCorrectionMaterial;
     [SerializeField] private bool Debug = false;
 
@@ -51,10 +50,15 @@ public class SetInteractiveShaderEffects : MonoBehaviour
         Shader.SetGlobalVector("_CameraPosition", orthoCam.transform.position);
 
         MovementCorrectionMaterial.SetVector("_UVOffset", delta);
+        Shader.SetGlobalVector("_UVOffsetSnow", delta);
+
         RenderTexture temp = RenderTexture.GetTemporary(orthoCam.targetTexture.width, orthoCam.targetTexture.height,
               0, orthoCam.targetTexture.format);
         Graphics.Blit(orthoCam.targetTexture, temp, MovementCorrectionMaterial);
         Graphics.Blit(temp, orthoCam.targetTexture);
+
+        Shader.SetGlobalTexture("_SplatTex", orthoCam.targetTexture);
+
         temp.Release();
     }
 

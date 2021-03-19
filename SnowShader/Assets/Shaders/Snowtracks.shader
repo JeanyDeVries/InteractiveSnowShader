@@ -3,7 +3,7 @@
     Properties{
         [Header(Vertex options)]
         [Space(5)]
-        _Tess("Tessellation", Range(1,64)) = 4
+        _EdgeLength("Tessellation edge", Range(0,1)) = 0.01
         _Displacement("Displacement", Range(0, 1.0)) = 0.3
 
         [Space(10)]
@@ -34,7 +34,7 @@
         LOD 300
 
         CGPROGRAM
-        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessFixed nolightmap fragment frag
+        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessEdge nolightmap fragment frag
         #pragma target 5.0
         #include "Tessellation.cginc"
 
@@ -47,10 +47,11 @@
         };
 
         /*Set the tesselation set in the inspector to the mesh*/
-        float _Tess;
-        float4 tessFixed()
+        float _EdgeLength;
+
+        float4 tessEdge(appdata v0, appdata v1, appdata v2)
         {
-            return _Tess;
+            return UnityEdgeLengthBasedTess(v0.vertex, v1.vertex, v2.vertex, _EdgeLength);
         }
 
         sampler2D _MainTex;

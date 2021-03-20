@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 public class SetInteractiveShaderEffects : MonoBehaviour
 {
-    [SerializeField] float timeLimitRender;
+    [SerializeField] float resfreshRate;
     [SerializeField] private Material MovementCorrectionMaterial;
     [SerializeField] private bool Debug = false;
 
@@ -31,7 +31,7 @@ public class SetInteractiveShaderEffects : MonoBehaviour
     private void Update()
     {
         Timer();
-        if (timer < timeLimitRender)
+        if (timer < resfreshRate)
             return;
         timer = 0.0f;
 
@@ -58,6 +58,7 @@ public class SetInteractiveShaderEffects : MonoBehaviour
         Graphics.Blit(temp, orthoCam.targetTexture);
 
         Shader.SetGlobalTexture("_SplatTex", orthoCam.targetTexture);
+        Shader.SetGlobalTexture("_SnowSplatTex", orthoCam.targetTexture);
 
         temp.Release();
     }

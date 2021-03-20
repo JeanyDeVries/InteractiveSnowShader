@@ -21,7 +21,7 @@
         [Space(10)]
         [Header(SplatTexture)]
         [Space(5)]
-        _MainTex("Splat Texture", 2D) = "black" {}
+        _SnowSplatTex("Splat Texture", 2D) = "black" {}
 
         [Space(10)]
         [Header(Lighting)]
@@ -54,7 +54,7 @@
             return UnityEdgeLengthBasedTess(v0.vertex, v1.vertex, v2.vertex, _EdgeLength);
         }
 
-        sampler2D _MainTex;
+        sampler2D _SnowSplatTex;
         float _Displacement;
 
         uniform float _OrthographicCamSize;
@@ -86,7 +86,7 @@
             //Clamp the texture from 0 to 1 so it will not stack 
             //Look up the splat texture and grab the red value of the uv
             //Add the displacement value as an offset
-            float depth = saturate(tex2Dlod(_MainTex, float4(uv, 0, 0)).r) * _Displacement;
+            float depth = saturate(tex2Dlod(_SnowSplatTex, float4(uv, 0, 0)).r) * _Displacement;
             //Set the vertex and distract the normal with the displacement for the depth in the snow
             v.vertex.xyz -= v.normal * depth;
 
@@ -96,7 +96,7 @@
         {
             float2 uv_GroundTex;
             float2 uv_SnowTex;
-            float2 uv_Splat;
+            float2 uv_SnowSplatTex;
             float3 worldPos;
         };
 
@@ -113,14 +113,14 @@
             //Clamp the texture from 0 to 1 so it will not stack
             //Look up the splat texture and grab the red value of the uv
             //Add the displacement value as an offset
-            half depth = saturate(tex2Dlod(_MainTex, float4(uv, 0, 0)).r);
+            half depth = saturate(tex2Dlod(_SnowSplatTex, float4(uv, 0, 0)).r);
 
             //mix the snow and ground texture according to the depth of the snow
             half4 color = lerp(tex2D(_SnowTex, IN.uv_SnowTex) * _SnowColor, tex2D(_GroundTex, IN.uv_GroundTex) * _GroundColor, depth);
 
             o.Albedo = color.rgb * 1.0;
-            o.Specular = 0.5;
-            o.Gloss = 0.5;
+            o.Specular = 0.05;
+            o.Gloss = 0.05;
         }
         ENDCG
         }

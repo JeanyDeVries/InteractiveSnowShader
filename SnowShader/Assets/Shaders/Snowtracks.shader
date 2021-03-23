@@ -1,9 +1,11 @@
 ﻿Shader "Custom/Snowtracks"
 {
     Properties{
-        [Header(Vertex options)]
+        [Header(Tesselation options)]
         [Space(5)]
-        _EdgeLength("Tessellation edge", float) = 0.01
+        _Tess("Tessellation ", float) = 0.01
+        _MinDist("minimal distance ", float) = 0
+        _MaxDist("maximal distance ", float) = 100
         _Phong("Phong Strengh", Range(0,1)) = 0.5
         _Displacement("Displacement", Range(0, 1.0)) = 0.3
 
@@ -35,7 +37,7 @@
         LOD 300
 
         CGPROGRAM
-        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessEdge tessphong:_Phong nolightmap fragment frag
+        #pragma surface surf BlinnPhong addshadow fullforwardshadows vertex:disp tessellate:tessDistance tessphong:_Phong nolightmap fragment frag
         #pragma target 5.0
         #include "Tessellation.cginc"
 
@@ -49,11 +51,12 @@
 
         /*Set the tesselation set in the inspector to the mesh*/
         float _Phong;
-        float _EdgeLength;
+        float _MinDist;
+        float _MaxDist;
+        float _Tess;
 
-        float4 tessEdge(appdata v0, appdata v1, appdata v2)
-        {
-            return UnityEdgeLengthBasedTess(v0.vertex, v1.vertex, v2.vertex, _EdgeLength);
+        float4 tessDistance (appdata v0, appdata v1, appdata v2) {
+            return UnityDistanceBasedTess(v0.vertex, v1.vertex, v2.vertex, _MinDist, _MaxDist, _Tess);
         }
 
         sampler2D _SnowSplatTex;

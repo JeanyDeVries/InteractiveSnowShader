@@ -51,10 +51,12 @@ Material:
     - _Displacement: 1
     - _EdgeLength: 0.01
     - _Glossiness: 0.5
+    - _MaxDist: 50
     - _Metallic: 0
+    - _MinDist: 1
     - _Phong: 1
     - _SnowOpacity: 0.0001
-    - _Tess: 64
+    - _Tess: 120
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _GroundColor: {r: 1, g: 1, b: 1, a: 1}

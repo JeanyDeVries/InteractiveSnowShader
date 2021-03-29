@@ -48,6 +48,7 @@
             {
                 fixed4 col = tex2D(_MainTex, i.uv +  _UVOffset);
 
+                //Set a black edge around the uv
                 float x = step(1.0 - _MainTex_TexelSize.x * 2.0f, saturate(abs((i.uv.x  * 2.0) - 1.0)));
                 float y = step(1.0 - _MainTex_TexelSize.y * 2.0f, saturate(abs((i.uv.y  * 2.0) - 1.0)));
                 col.rgb = lerp(col.rgb, (0.0).xxx, min(x + y, 1.0));   

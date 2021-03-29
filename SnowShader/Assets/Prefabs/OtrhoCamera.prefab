@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d4d03b0d6822b4fb70cb5b77bcecfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimitRender: 0
+  resfreshRate: 3
   MovementCorrectionMaterial: {fileID: 2100000, guid: 2ef3bd3e501273a4393bafe499fb4709,
     type: 2}
   Debug: 0

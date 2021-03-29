@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SetInteractiveShaderEffects : MonoBehaviour
+public class SetRenderTextureAccordingToPlayer : MonoBehaviour
 {
     [SerializeField] float resfreshRate;
     [SerializeField] private Material MovementCorrectionMaterial;
@@ -37,6 +37,7 @@ public class SetInteractiveShaderEffects : MonoBehaviour
 
     private void RecenterSplatMap()
     {
+        //See https://summit2021a.game-lab.nl/wp-admin/post.php?post=2597&action=edit chapter "keep it moving"
 
         Vector2 currPos = new Vector2(player.transform.position.x, player.transform.position.z);
         Vector2 delta = currPos - oldPlayerPos;

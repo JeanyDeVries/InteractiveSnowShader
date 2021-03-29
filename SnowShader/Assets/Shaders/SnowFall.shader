@@ -29,6 +29,7 @@
                 float4 vertex : SV_POSITION;
             };
 
+            //Returns a random value between 0 and 1
             float random(float3 co)
             {
                 return frac(sin(dot(co.xyz, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
@@ -51,6 +52,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
+
                 float rValue = ceil(random(float3(i.uv.x, i.uv.y, 0) * _Time.x) - (1 - _FlakeAmount));
                 col.r = col.r - (rValue * _FlakeOpacity);
 

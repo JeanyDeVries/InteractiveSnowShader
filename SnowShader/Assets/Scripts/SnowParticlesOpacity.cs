@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class snowOpacity : MonoBehaviour
+public class SnowParticlesOpacity : MonoBehaviour
 {
     public Shader snowFallShader;
     public MeshRenderer snowMeshRenderer;
@@ -17,7 +17,7 @@ public class snowOpacity : MonoBehaviour
         snowFallMat = new Material(snowFallShader);
     }
 
-    void LateUpdate()
+    void Update()
     {
         snowFallMat.SetFloat("_FlakeAmount", flakeAmount);
         snowFallMat.SetFloat("_FlakeOpacity", flakeOpacity);

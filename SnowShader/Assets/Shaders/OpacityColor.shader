@@ -3,7 +3,7 @@
 /*
     Set the opacity to the red material. It will then blend in the render texture
 */
-Shader "Custom/OpacitySnow"
+Shader "Custom/OpacityColor"
 {
     Properties
     {
@@ -64,6 +64,7 @@ Shader "Custom/OpacitySnow"
                 //Add an offset so the position is correct
                 uv += 0.5;
 
+                //Set black edge around the uv
                 float x = step(1.0 - _SplatTex_TexelSize.x * 2.0f, saturate(abs((uv.x * 2.0) - 1.0)));
                 float y = step(1.0 - _SplatTex_TexelSize.y * 2.0f, saturate(abs((uv.y * 2.0) - 1.0)));
                 col.rgb = lerp(col.rgb, (0.0).xxx, min(x + y, 1.0));

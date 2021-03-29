@@ -112,7 +112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385986501}
   m_LocalRotation: {x: -0.020877426, y: -0.43608895, z: -0.89941084, w: -0.021232506}
-  m_LocalPosition: {x: 48.5, y: -156.2, z: 54.6}
+  m_LocalPosition: {x: 48.4, y: -161, z: 60.6}
   m_LocalScale: {x: 25, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 4425428723515522892}
@@ -236,7 +236,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2111913436}
   m_LocalRotation: {x: -0.035984926, y: -0.42950973, z: -0.9020762, w: -0.022025637}
-  m_LocalPosition: {x: 47.2, y: -156, z: 53.6}
+  m_LocalPosition: {x: 47.1, y: -160.8, z: 59.6}
   m_LocalScale: {x: 25, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 4425428724667536224}
@@ -3778,7 +3778,7 @@ PrefabInstance:
     - target: {fileID: 3880458005077948454, guid: a80229eab2cce6e4f95a0504e3e0a749,
         type: 3}
       propertyPath: flakeOpacity
-      value: 0.02
+      value: 0.025
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a80229eab2cce6e4f95a0504e3e0a749, type: 3}

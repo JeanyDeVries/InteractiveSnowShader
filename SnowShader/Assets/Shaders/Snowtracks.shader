@@ -7,7 +7,7 @@
         _MinDist("minimal distance ", float) = 0
         _MaxDist("maximal distance ", float) = 100
         _Phong("Phong Strengh", Range(0,1)) = 0.5
-        _Displacement("Displacement", Range(0, 1.0)) = 0.3
+        _Displacement("Displacement", float) = 0.3
 
         [Space(10)]
         [Header(Snow)]
@@ -88,13 +88,14 @@
             uv += 0.5;
 
 
+            //Vertex shader
+
             //Clamp the texture from 0 to 1 so it will not stack 
             //Look up the splat texture and grab the red value of the uv
             //Add the displacement value as an offset
             float depth = saturate(tex2Dlod(_SnowSplatTex, float4(uv, 0, 0)).r) * _Displacement;
             //Set the vertex and distract the normal with the displacement for the depth in the snow
             v.vertex.xyz -= v.normal * depth;
-
         }
 
         struct Input 
@@ -114,6 +115,8 @@
             //Add an offset so the position is correct
             uv += 0.5;
 
+
+            //Surface shader
 
             //Clamp the texture from 0 to 1 so it will not stack
             //Look up the splat texture and grab the red value of the uv

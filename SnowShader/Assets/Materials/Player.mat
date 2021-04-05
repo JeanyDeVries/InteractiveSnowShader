@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Foot
+  m_Name: Player
   m_Shader: {fileID: 4800000, guid: e6d4c5d06f5210c4f8e6a1d47c390475, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -68,7 +68,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Opacity: 10
+    - _Opacity: 3
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SnowStrength: 0.0001

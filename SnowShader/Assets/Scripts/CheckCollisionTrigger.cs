@@ -2,16 +2,19 @@
 
 public class CheckCollisionTrigger : MonoBehaviour
 {
-    Material opacityMaterial;
+    [SerializeField] Material opacityMaterial;
     float opacity;
 
     private void Awake()
     {
-        opacityMaterial = GetComponent<MeshRenderer>().material;
+        if(opacityMaterial == null)
+            opacityMaterial = GetComponent<MeshRenderer>().material;
+
         opacity = opacityMaterial.GetFloat("_Opacity");
 
         //Begin with setting it to 0 so it won't leave a trail when there is no collsion
         opacityMaterial.SetFloat("_Opacity", 0.0f);
+
     }
 
     private void OnTriggerEnter(Collider other)
